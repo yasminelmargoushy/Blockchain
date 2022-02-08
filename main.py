@@ -40,7 +40,7 @@ class Transaction:
 
 
 class Block:
-    def __init__(self, transactions_list):
+    def __init__(self, transactions_list, Attacker):
         self.transactions_list = transactions_list
         tempdata = ""
         for i in range(len(transactions_list)):
@@ -50,11 +50,13 @@ class Block:
         self.hash_data = temp_hash.final_hash
         self.children = []
         self.prev_hash = None
+        self.Attacker = Attacker
 
     def print_block(self):
         print("*******************************************")
+        print(f"Attacker Block: {self.Attacker}")
         print(f"Previous Hash: {self.prev_hash}")
-        print(f"Data: {self.data}")
+        #print(f"Data: {self.data}")
         print(f"Current Hash: {self.hash_data}")
         print("*******************************************")
 
@@ -93,8 +95,8 @@ class BlockChain:
             self.longest_branch = self.find_temp_long(self.root)
 
 
-    def push_back(self, transactions_list, prev_hash):
-        new_block = Block(transactions_list)
+    def push_back(self, transactions_list, prev_hash, Attacker):
+        new_block = Block(transactions_list, Attacker)
         if self.root is None:
             self.root = new_block
             self.last_block = new_block
@@ -178,9 +180,9 @@ AttackHash = None
 for i in range(len(list_Blocks)):
     # Simulate User
     if i == 0:
-        TempBlock = B_Chain.push_back(list_Blocks[0], None)
+        TempBlock = B_Chain.push_back(list_Blocks[0], None, False)
     else:
-        TempBlock = B_Chain.push_back(list_Blocks[i], TempBlock.hash_data)
+        TempBlock = B_Chain.push_back(list_Blocks[i], TempBlock.hash_data, False)
 
     # Simulate Attacker choosing to create a branch in node 7 can range from [0-17] which is all the user blocks
     if i == 7:
@@ -189,14 +191,13 @@ for i in range(len(list_Blocks)):
 
 ####################################  Push Attacker Blocks in Blockchain  #########################################
 # The Attacker chose to add 13 (ie: 19 - 6) blocks it can vary from [0-18] depending on the power of the attacker
-for i in range(len(List_Attacker_Blocks)-6):
+for i in range(len(List_Attacker_Blocks)-8):
     # Simulate Attacker Trying to make it's branch the longest branch
     if i == 0:
-        TempBlock = B_Chain.push_back(List_Attacker_Blocks[0], AttackHash)
+        TempBlock = B_Chain.push_back(List_Attacker_Blocks[0], AttackHash, True)
     else:
-        TempBlock = B_Chain.push_back(List_Attacker_Blocks[i], TempBlock.hash_data)
+        TempBlock = B_Chain.push_back(List_Attacker_Blocks[i], TempBlock.hash_data, True)
 
 B_Chain.print_list()
-
 
 
