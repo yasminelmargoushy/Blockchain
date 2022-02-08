@@ -54,7 +54,7 @@ class Block:
     def print_block(self):
         print("*******************************************")
         print(f"Previous Hash: {self.prev_hash}")
-        #print(f"Data: {self.data}")
+        print(f"Data: {self.data}")
         print(f"Current Hash: {self.hash_data}")
         print("*******************************************")
 
