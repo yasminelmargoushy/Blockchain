@@ -114,13 +114,14 @@ class BlockChain:
                     if prev_hash == p.hash_data:
                         new_block.prev_hash = p.hash_data
                         p.children.append(new_block)
-                        return
+                        return new_block
                     q.pop(0)
                     for i in range(len(p.children)):
                         q.append(p.children[i])
                     n -= 1
             self.find_longest_branch()
             self.last_block = self.longest_branch[-1]
+        return new_block
 
     def print_list(self):
         self.find_longest_branch()
@@ -128,13 +129,13 @@ class BlockChain:
             temp.print_block()
 
 
-######################################  Create Random Transactions  ##########################################
+######################################  Create User Random Transactions  ##########################################
 list_transactions = []
 for i in range(100):
     trans = Transaction(random.choice(User_Names), random.choice(User_Names), random.randint(0, 10))
     list_transactions.append(trans)
 
-############################  Create Blocks from the random Transactions  ####################################
+##########################  Create User Blocks from the random User Transactions  #################################
 # List containing Blocks
 list_Blocks = []
 # Number of transactions in different blocks
@@ -149,19 +150,51 @@ for i in range(len(list_no_transactions_in_block)):
     sum = sum + list_no_transactions_in_block[i]
     list_Blocks.append(Block_transactions)
 
-#########################################  Push Blocks in Blockchain  ########################################
+######################################  Create Attacker Random Transactions  ##########################################
+list_Attacker_transactions = []
+for i in range(50):
+    trans = Transaction(random.choice(User_Names), random.choice(User_Names), random.randint(0, 10))
+    list_Attacker_transactions.append(trans)
+
+##########################  Create User Blocks from the random User Transactions  #################################
+# List containing Blocks
+List_Attacker_Blocks = []
+# Number of transactions in different blocks
+list_no_Attacker_transactions_in_block = [3, 2, 4, 4, 3, 4, 3, 1, 2, 1, 2, 1, 4, 4, 3, 2, 3, 2, 2]
+sum = 0
+for i in range(len(list_no_Attacker_transactions_in_block)):
+    Block_transactions = []
+    j = sum
+    while j < sum + list_no_Attacker_transactions_in_block[i]:
+        Block_transactions.append(list_Attacker_transactions[j])
+        j = j + 1
+    sum = sum + list_no_Attacker_transactions_in_block[i]
+    List_Attacker_Blocks.append(Block_transactions)
+
+#######################################  Push User Blocks in Blockchain  ##########################################
 B_Chain = BlockChain()
-temphash = None
-for i in range(len(list_Blocks)-1):
+TempBlock = None
+AttackHash = None
+for i in range(len(list_Blocks)):
     # Simulate User
-    B_Chain.push_back(list_Blocks[i], None)
+    if i == 0:
+        TempBlock = B_Chain.push_back(list_Blocks[0], None)
+    else:
+        TempBlock = B_Chain.push_back(list_Blocks[i], TempBlock.hash_data)
 
-    # Simulate Attacker
+    # Simulate Attacker choosing to create a branch in node 7 can range from [0-17] which is all the user blocks
     if i == 7:
-        temphash = B_Chain.last_block.hash_data
-    if i == 8:
-        B_Chain.push_back(list_Blocks[-1], temphash)
+        AttackHash = TempBlock.hash_data
 
+
+####################################  Push Attacker Blocks in Blockchain  #########################################
+# The Attacker chose to add 13 (ie: 19 - 6) blocks it can vary from [0-18] depending on the power of the attacker
+for i in range(len(List_Attacker_Blocks)-6):
+    # Simulate Attacker Trying to make it's branch the longest branch
+    if i == 0:
+        TempBlock = B_Chain.push_back(List_Attacker_Blocks[0], AttackHash)
+    else:
+        TempBlock = B_Chain.push_back(List_Attacker_Blocks[i], TempBlock.hash_data)
 
 B_Chain.print_list()
 
