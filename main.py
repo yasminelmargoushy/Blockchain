@@ -134,7 +134,7 @@ class BlockChain:
 ######################################  Create User Random Transactions  ##########################################
 list_transactions = []
 for i in range(100):
-    trans = Transaction(random.choice(User_Names), random.choice(User_Names), random.randint(0, 10))
+    trans = Transaction(random.choice(User_Names), random.choice(User_Names), random.randint(1, 10))
     list_transactions.append(trans)
 
 ##########################  Create User Blocks from the random User Transactions  #################################
@@ -155,7 +155,7 @@ for i in range(len(list_no_transactions_in_block)):
 ######################################  Create Attacker Random Transactions  ##########################################
 list_Attacker_transactions = []
 for i in range(50):
-    trans = Transaction(random.choice(User_Names), random.choice(User_Names), random.randint(0, 10))
+    trans = Transaction(random.choice(User_Names), random.choice(User_Names), random.randint(1, 10))
     list_Attacker_transactions.append(trans)
 
 ##########################  Create User Blocks from the random User Transactions  #################################
