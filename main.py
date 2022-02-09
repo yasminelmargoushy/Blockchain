@@ -140,8 +140,8 @@ for i in range(100):
 ##########################  Create User Blocks from the random User Transactions  #################################
 # List containing Blocks
 list_Blocks = []
-# Number of transactions in different blocks
-list_no_transactions_in_block = [6, 4, 8, 7, 7, 8, 6, 1, 4, 2, 5, 2, 8, 8, 7, 3, 6, 8]
+# Number of transactions in different blocks [20 blocks]
+list_no_transactions_in_block = [6, 4, 5, 3, 7, 7, 8, 6, 1, 4, 2, 5, 2, 8, 8, 7, 3, 6, 4, 4]
 sum = 0
 for i in range(len(list_no_transactions_in_block)):
     Block_transactions = []
@@ -161,8 +161,8 @@ for i in range(50):
 ##########################  Create User Blocks from the random User Transactions  #################################
 # List containing Blocks
 List_Attacker_Blocks = []
-# Number of transactions in different blocks
-list_no_Attacker_transactions_in_block = [3, 2, 4, 4, 3, 4, 3, 1, 2, 1, 2, 1, 4, 4, 3, 2, 3, 2, 2]
+# Number of transactions in different blocks [max 20 blocks]
+list_no_Attacker_transactions_in_block = [3, 2, 1, 4, 3, 4, 3, 1, 2, 1, 2, 1, 4, 4, 3, 2, 3, 2, 2, 3]
 sum = 0
 for i in range(len(list_no_Attacker_transactions_in_block)):
     Block_transactions = []
@@ -184,14 +184,14 @@ for i in range(len(list_Blocks)):
     else:
         TempBlock = B_Chain.push_back(list_Blocks[i], TempBlock.hash_data, False)
 
-    # Simulate Attacker choosing to create a branch in node 7 can range from [0-17] which is all the user blocks
+    # Simulate Attacker choosing to create a branch in node 7 can range from [0-19] which is all the user blocks
     if i == 7:
         AttackHash = TempBlock.hash_data
 
 
 ####################################  Push Attacker Blocks in Blockchain  #########################################
-# The Attacker chose to add 13 (ie: 19 - 6) blocks it can vary from [0-18] depending on the power of the attacker
-for i in range(len(List_Attacker_Blocks)-8):
+# The Attacker chose to add 13 (ie: 20 - 6) blocks it can vary from [0-19] depending on the power of the attacker
+for i in range(len(List_Attacker_Blocks)-9):
     # Simulate Attacker Trying to make it's branch the longest branch
     if i == 0:
         TempBlock = B_Chain.push_back(List_Attacker_Blocks[0], AttackHash, True)
